@@ -44,30 +44,32 @@ class Login extends React.Component {
   render() {
     const { email, userName, disabled } = this.state;
     return (
-      <form>
-        <input
-          type="email"
-          name="email"
-          value={ email }
-          data-testid="input-gravatar-email"
-          onChange={ this.onInputChange }
-        />
-        <input
-          type="text"
-          name="userName"
-          value={ userName }
-          data-testid="input-player-name"
-          onChange={ this.onInputChange }
-        />
-        <button
-          type="button"
-          data-testid="btn-play"
-          disabled={ disabled }
-          onClick={ () => this.getTokens() }
-        >
-          s
-          Play
-        </button>
+      <>
+        <h1>Xablau</h1>
+        <form>
+          <input
+            type="email"
+            name="email"
+            value={ email }
+            data-testid="input-gravatar-email"
+            onChange={ this.onInputChange }
+          />
+          <input
+            type="text"
+            name="userName"
+            value={ userName }
+            data-testid="input-player-name"
+            onChange={ this.onInputChange }
+          />
+          <button
+            type="button"
+            data-testid="btn-play"
+            disabled={ disabled }
+            onClick={ () => this.getTokens() }
+          >
+            Play
+          </button>
+        </form>
         <button
           type="button"
           data-testid="btn-settings"
@@ -75,8 +77,33 @@ class Login extends React.Component {
         >
           Configurações
         </button>
+      </>
+      <form>
+        <input
+          type="email"
+          name="email"
+          value={ email }
+          data-testid="input-gravatar-email"
+          onChange={ this.onInputChange }
+          placeholder="email"
+        />
+        <input
+          type="text"
+          name="userName"
+          value={ userName }
+          data-testid="input-player-name"
+          onChange={ this.onInputChange }
+          placeholder="name"
+        />
+        <button
+          type="button"
+          data-testid="btn-play"
+          disabled={ disabled }
+          onClick={ () => this.getTokens() }
+        >
+          Play
+        </button>
       </form>
-
     );
   }
 }
