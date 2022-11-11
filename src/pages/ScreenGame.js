@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Redirect } from 'react-router-dom';
 import HeaderGame from '../components/HeaderGame';
+import { sumScoreAction } from '../redux/actions/sumScore';
 // import { getQuestions } from '../redux/actions/questions';
 // import data from '../servicesapi';
 
@@ -14,6 +15,8 @@ class ScreenGame extends React.Component {
       classGreen: { border: '' },
       classRed: { border: '' },
       seconds: 30,
+      validation: 'correct-answer',
+
       // disabled: false,
     };
   }
@@ -40,7 +43,20 @@ class ScreenGame extends React.Component {
     }
   }
 
-  changeColor = () => {
+  changeColor = ({ target: { id } }) => {
+    const { dispatch, questions, assertions, score } = this.props;
+    const { index, seconds, validation } = this.state;
+    const difs = { hard: 3, medium: 2, easy: 1 };
+    if (questions.response_code === 0) {
+      const dif = questions.results[index].difficulty;
+      const difValue = difs[dif];
+      if (id === validation) {
+        const base = 10;
+        const assert = assertions + 1;
+        const scor = score + (base + (seconds * difValue));
+        dispatch(sumScoreAction(assert, scor));
+      }
+    }
     this.setState({
       classGreen: { border: '3px solid rgb(6, 240, 15)' },
       classRed: { border: '3px solid red' },
@@ -83,7 +99,7 @@ class ScreenGame extends React.Component {
       localStorage.clear();
       history.push('/');
     } else {
-      const { index, seconds } = this.state;
+      const { index, seconds, validation } = this.state;
       const array = this.array();
       const randomx = this.random(array);
       // const { results } = data;
@@ -109,10 +125,15 @@ class ScreenGame extends React.Component {
                 type="button"
                 disabled={ seconds === 0 }
                 key={ i }
+                id={ answer === questions.results[index].correct_answer
+                  ? validation
+                  : `wrong-answer-${questions.results[index]
+                    .incorrect_answers
+                    .indexOf(answer)}` }
                 style={ answer === questions.results[index].correct_answer
                   ? classGreen : classRed }
                 data-testid={ answer === questions.results[index].correct_answer
-                  ? 'correct-answer'
+                  ? validation
                   : `wrong-answer-${questions.results[index]
                     .incorrect_answers
                     .indexOf(answer)}` }
@@ -128,6 +149,9 @@ class ScreenGame extends React.Component {
   }
 }
 ScreenGame.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
@@ -139,12 +163,15 @@ ScreenGame.propTypes = {
         incorrect_answers: PropTypes.arrayOf(PropTypes.string),
         correct_answer: PropTypes.string,
         category: PropTypes.string,
+        difficulty: PropTypes.string,
       }),
     ),
   }).isRequired,
 };
 const mapStateToProps = (state) => ({
   questions: state.catchQuestions.questions,
+  assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(ScreenGame);
