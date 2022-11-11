@@ -51,7 +51,6 @@ class Login extends React.Component {
     const { email, userName, disabled } = this.state;
     return (
       <>
-        <h1>Xablau</h1>
         <form>
           <input
             type="email"
@@ -59,6 +58,7 @@ class Login extends React.Component {
             value={ email }
             data-testid="input-gravatar-email"
             onChange={ this.onInputChange }
+            placeholder="email"
           />
           <input
             type="text"
@@ -66,6 +66,7 @@ class Login extends React.Component {
             value={ userName }
             data-testid="input-player-name"
             onChange={ this.onInputChange }
+            placeholder="name"
           />
           <button
             type="button"
