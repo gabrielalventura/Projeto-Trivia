@@ -13,14 +13,32 @@ class ScreenGame extends React.Component {
       index: 0,
       classGreen: { border: '' },
       classRed: { border: '' },
+      seconds: 30,
+      // disabled: false,
     };
   }
 
-  /* componentDidMount() {
-    const array = this.array();
-    const randomx = this.random(array);
-    this.setState({ answers: randomx });
-  } */
+  componentDidMount() {
+    const { seconds } = this.state;
+    const mil = 1000;
+    if (seconds !== 0) {
+      this.id = setInterval(() => {
+        this.setState((prevState) => ({
+          seconds: prevState.seconds - 1,
+        }));
+      }, mil);
+    }
+  }
+
+  componentDidUpdate() {
+    const { seconds } = this.state;
+    if (seconds === 0) {
+      // this.setState({
+      //   disabled: true,
+      // });
+      clearInterval(this.id);
+    }
+  }
 
   changeColor = () => {
     this.setState({
@@ -65,7 +83,7 @@ class ScreenGame extends React.Component {
       localStorage.clear();
       history.push('/');
     } else {
-      const { index } = this.state;
+      const { index, seconds } = this.state;
       const array = this.array();
       const randomx = this.random(array);
       // const { results } = data;
@@ -79,6 +97,7 @@ class ScreenGame extends React.Component {
         <>
           <HeaderGame />
           <div>
+            <h1>{ seconds }</h1>
             <p data-testid="question-category">{ questions.results[index].category }</p>
             { questions
               ? <h1 data-testid="question-text">{ questions.results[index].question}</h1>
@@ -88,6 +107,7 @@ class ScreenGame extends React.Component {
             { randomx.map((answer, i) => (
               <button
                 type="button"
+                disabled={ seconds === 0 }
                 key={ i }
                 style={ answer === questions.results[index].correct_answer
                   ? classGreen : classRed }
