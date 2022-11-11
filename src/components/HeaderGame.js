@@ -16,7 +16,7 @@ class HeaderGame extends React.Component {
   }
 
   render() {
-    const { userName } = this.props;
+    const { userName, score } = this.props;
     const { endPoint } = this.state;
     return (
       <header>
@@ -33,7 +33,7 @@ class HeaderGame extends React.Component {
         <h2
           data-testid="header-score"
         >
-          0
+          {score}
         </h2>
       </header>
     );
@@ -43,11 +43,13 @@ class HeaderGame extends React.Component {
 const mapStateToProps = (state) => ({
   userName: state.userLogin.userName,
   email: state.userLogin.email,
+  score: state.player.score,
 });
 
 HeaderGame.propTypes = {
   userName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(HeaderGame);
