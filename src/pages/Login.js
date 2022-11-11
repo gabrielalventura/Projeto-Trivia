@@ -51,6 +51,7 @@ class Login extends React.Component {
     const { email, userName, disabled } = this.state;
     return (
       <>
+        <h1>Xablau</h1>
         <form>
           <input
             type="email"

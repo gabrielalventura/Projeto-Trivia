@@ -14,6 +14,7 @@ class ScreenGame extends React.Component {
       classGreen: { border: '' },
       classRed: { border: '' },
       seconds: 30,
+      showBtn: false,
       // disabled: false,
     };
   }
@@ -44,7 +45,16 @@ class ScreenGame extends React.Component {
     this.setState({
       classGreen: { border: '3px solid rgb(6, 240, 15)' },
       classRed: { border: '3px solid red' },
+      showBtn: true,
     });
+  };
+
+  changeQuestion = () => {
+    this.setState((prevState) => ({
+      index: prevState.index + 1,
+      classGreen: { border: '' },
+      classRed: { border: '' },
+    }));
   };
 
   random = (array) => {
@@ -77,7 +87,7 @@ class ScreenGame extends React.Component {
 
   render() {
     const { questions, history } = this.props;
-    const { classGreen, classRed } = this.state;
+    const { classGreen, classRed, showBtn } = this.state;
 
     if (questions.response_code !== 0) {
       localStorage.clear();
@@ -97,14 +107,14 @@ class ScreenGame extends React.Component {
         <>
           <HeaderGame />
           <div>
-            <h1>{ seconds }</h1>
-            <p data-testid="question-category">{ questions.results[index].category }</p>
-            { questions
-              ? <h1 data-testid="question-text">{ questions.results[index].question}</h1>
+            <h1>{seconds}</h1>
+            <p data-testid="question-category">{questions.results[index].category}</p>
+            {questions
+              ? <h1 data-testid="question-text">{questions.results[index].question}</h1>
               : <h1>Loading...</h1>}
           </div>
           <div data-testid="answer-options">
-            { randomx.map((answer, i) => (
+            {randomx.map((answer, i) => (
               <button
                 type="button"
                 disabled={ seconds === 0 }
@@ -121,6 +131,19 @@ class ScreenGame extends React.Component {
                 {answer}
               </button>
             ))}
+          </div>
+          <div>
+            {showBtn
+              ? (
+                <button
+                  type="button"
+                  data-testid="btn-next"
+                  onClick={ this.changeQuestion }
+                >
+                  Next
+                </button>)
+              : ' '}
+
           </div>
         </>
       );
