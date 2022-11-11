@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { getUser } from '../redux/actions/userLogin';
+import { getQuestions } from '../redux/actions/questions';
 
 class Login extends React.Component {
   constructor() {
@@ -31,7 +32,14 @@ class Login extends React.Component {
     const { dispatch } = this.props;
     const { userName, email } = this.state;
     dispatch(getUser(userName, email));
-    history.push('/game');
+    const token = localStorage.getItem('token');
+    const response2 = await fetch(
+      `https://opentdb.com/api.php?amount=5&token=${token}`,
+    );
+    const questionsApi = await response2.json();
+    // console.log(questionsApi);
+    dispatch(getQuestions(questionsApi));
+    if (questionsApi) history.push('/game');
   };
 
   onClickSettingsBtn = () => {

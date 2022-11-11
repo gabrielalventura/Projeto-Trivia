@@ -1,23 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// import { Redirect } from 'react-router-dom';
 import HeaderGame from '../components/HeaderGame';
-import { getQuestions } from '../redux/actions/questions';
+// import { getQuestions } from '../redux/actions/questions';
 // import data from '../servicesapi';
 
 class ScreenGame extends React.Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     index: ,
-  //   };
-  // }
-
-  async componentDidMount() {
-    await this.getQuestions();
+  constructor() {
+    super();
+    this.state = {
+      index: 0,
+    };
   }
 
-  getQuestions = async () => {
+  /* async componentDidMount() {
+    const { history, questions } = this.props;
+    if (questions.response_code != 0) {
+      localStorage.clear();
+      history.push('/');
+    }
+  } */
+
+  /* getQuestions = async () => {
     const { dispatch } = this.props;
     const token = localStorage.getItem('token');
     const response = await fetch(
@@ -26,35 +31,36 @@ class ScreenGame extends React.Component {
     const questionsApi = await response.json();
     // console.log(questionsApi);
     dispatch(getQuestions(questionsApi));
-  };
+  }; */
 
   render() {
     const { questions } = this.props;
+    const { index } = this.state;
     // const { results } = data;
     // const { index } = this.state;
-    // console.log(questions);
+    // console.log(questions)
+    const arr = [...questions.results[index].incorrect_answers, questions.results[index].correct_answer];
+
+    console.log(questions.response_code);
+
     return (
       <>
         <HeaderGame />
         <div>
-          { questions ? <h1>{ results[0].question}</h1> : '' }
-
-          {/* {results[0].type === 'multiple' ? (
-            <>
-
-              <button type="button">{ results[0].correct_answer }</button>
-              <button type="button">{ results[0].incorrect_answers[0] }</button>
-              <button type="button">{ results[0].incorrect_answers[1] }</button>
-              <button type="button">{ results[0].incorrect_answers[2] }</button>
-
-            </>
-          ) : (
-            <>
-              <button type="button">{ results[0].correct_answer }</button>
-              <button type="button">{ results[0].incorrect_answers[0] }</button>
-            </>
-          )} */}
+          <p data-testid="question-category">{ questions.results[index].category }</p>
+          { questions ? <h1 data-testid="question-text">{ questions.results[0].question}</h1> : <h1>Loading...</h1> }
         </div>
+        { arr.map((answer, index) => (
+          <button
+            type="button"
+            key={ index }
+            data-testid={ answer === questions.results[index].correct_answer
+              ? 'correct_answer'
+              : `wrong-answer-${questions.results[index].incorrect_answers.indexOf(answer)}` }
+          >
+            {answer}
+          </button>
+        ))}
       </>
     );
   }
