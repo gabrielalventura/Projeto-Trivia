@@ -11,8 +11,8 @@ class ScreenGame extends React.Component {
     super();
     this.state = {
       index: 0,
-      classGreen: {},
-      classRed: {},
+      classGreen: { border: '' },
+      classRed: { border: '' },
     };
   }
 
@@ -22,10 +22,12 @@ class ScreenGame extends React.Component {
     this.setState({ answers: randomx });
   } */
 
-  // changeColor= ()=>{
-  //   { answer === questions.results[index].correct_answer ?
-
-  // }
+  changeColor = () => {
+    this.setState({
+      classGreen: { border: '3px solid rgb(6, 240, 15)' },
+      classRed: { border: '3px solid red' },
+    });
+  };
 
   random = (array) => {
     const shuffledArray = [];
@@ -71,7 +73,7 @@ class ScreenGame extends React.Component {
       // console.log(questions)
       // const arr = [...questions.results[index].incorrect_answers, questions.results[index].correct_answer];
 
-      console.log(questions.response_code);
+      // console.log(questions.response_code);
 
       return (
         <>
@@ -87,14 +89,14 @@ class ScreenGame extends React.Component {
               <button
                 type="button"
                 key={ i }
-                onClick={ () => console.log('clicou') }
                 style={ answer === questions.results[index].correct_answer
-                  ? { classGreen } :  { classRed } }
+                  ? classGreen : classRed }
                 data-testid={ answer === questions.results[index].correct_answer
                   ? 'correct-answer'
                   : `wrong-answer-${questions.results[index]
                     .incorrect_answers
                     .indexOf(answer)}` }
+                onClick={ this.changeColor }
               >
                 {answer}
               </button>
