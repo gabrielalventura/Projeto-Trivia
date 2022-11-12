@@ -1,7 +1,7 @@
 import React from 'react';
-import HeaderGame from '../components/HeaderGame';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import HeaderGame from '../components/HeaderGame';
 
 class Feedback extends React.Component {
   message = () => {
