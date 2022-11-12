@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import HeaderGame from '../components/HeaderGame';
 
 class Feedback extends React.Component {
   message = () => {
@@ -18,9 +19,11 @@ class Feedback extends React.Component {
   render() {
     return (
       <div>
+        <header>
+          <HeaderGame />
+        </header>
         <h1 data-testid="feedback-text">
           { this.message() }
-
         </h1>
       </div>
     );
