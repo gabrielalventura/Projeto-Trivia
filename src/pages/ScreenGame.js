@@ -64,8 +64,15 @@ class ScreenGame extends React.Component {
   };
 
   changeQuestion = () => {
+    const { index } = this.state;
+    const magic = 4;
+    if (index === magic) {
+      const { history } = this.props;
+      history.push('/feedback');
+    }
     this.setState((prevState) => ({
       index: prevState.index + 1,
+      seconds: 30,
       classGreen: { border: '' },
       classRed: { border: '' },
     }));
