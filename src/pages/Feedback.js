@@ -22,7 +22,7 @@ class Feedback extends React.Component {
   };
 
   render() {
-    const { score, assertions } = this.props;
+    const { score, assertions, history } = this.props;
     return (
       <div>
         <header>
@@ -39,6 +39,13 @@ class Feedback extends React.Component {
           onClick={ this.playAgain }
         >
           Play Again
+        </button>
+        <button
+          type="button"
+          data-testid="btn-ranking"
+          onClick={ () => history.push('/ranking') }
+        >
+          Ranking
         </button>
       </div>
     );
