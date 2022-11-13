@@ -48,14 +48,14 @@ describe('Testa pagina feedback', () => {
     expect(history.location.pathname).toBe('/')
    
   });
-//   test('teste botao ranking', () => {
-//     const { history } = renderWithRouterAndRedux(<App />, playerA, '/feedback');
-//    const btn = screen.getByTestId('btn-ranking')
-//     expect(btn).toBeInTheDocument();
-//     userEvent.click(btn);
-//     expect(history.location.pathname).toBe('/ranking')
-//     const ranking = screen.getByTestId('ranking-title')
-//   });
+  test('teste botao ranking', () => {
+    const { history } = renderWithRouterAndRedux(<App />, playerA, '/feedback');
+   const btn = screen.getByTestId('btn-ranking')
+    expect(btn).toBeInTheDocument();
+    userEvent.click(btn);
+    expect(history.location.pathname).toBe('/ranking')
+    const ranking = screen.getByTestId('ranking-title')
+  });
   test('testa mensagem boa', () => {
     const { getByText } = renderWithRouterAndRedux(<App />, playerA, '/feedback')
     const wellDone = getByText(/well done!/i)
