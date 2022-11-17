@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { getUser } from '../redux/actions/userLogin';
-import { getQuestions } from '../redux/actions/questions';
+import { getQuestions, randomArray } from '../redux/actions/questions';
 
 class Login extends React.Component {
   constructor() {
@@ -24,6 +24,24 @@ class Login extends React.Component {
     }
   };
 
+  random = (array) => {
+    const shuffledArray = [];
+    const usedIndexes = [];
+
+    let i = 0;
+    while (i < array.length) {
+      const randomNumber = Math.floor(Math.random() * array.length);
+      if (!usedIndexes.includes(randomNumber)) {
+        shuffledArray.push(array[randomNumber]);
+        usedIndexes.push(randomNumber);
+        i += 1;
+      }
+    }
+    return shuffledArray;
+  };
+
+  // https://openjavascript.info/2022/03/14/how-to-shuffle-an-array-in-javascript/ func abaixo é p construir array
+
   getTokens = async () => {
     const { history } = this.props;
     const response = await fetch('https://opentdb.com/api_token.php?command=request');
@@ -39,6 +57,17 @@ class Login extends React.Component {
     const questionsApi = await response2.json();
     // console.log(questionsApi);
     dispatch(getQuestions(questionsApi));
+    if (questionsApi.response_code === 0) {
+      const arrx = [];
+      questionsApi.results.map((e) => {
+        const array = [e.correct_answer, ...e.incorrect_answers];
+        const arrays = this.random(array);
+        arrx.push(arrays);
+        return arrx;
+      });
+      dispatch(randomArray(arrx));
+    }
+
     if (questionsApi) history.push('/game');
   };
 

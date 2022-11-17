@@ -78,34 +78,6 @@ class ScreenGame extends React.Component {
     }));
   };
 
-  random = (array) => {
-    const shuffledArray = [];
-    const usedIndexes = [];
-
-    let i = 0;
-    while (i < array.length) {
-      const randomNumber = Math.floor(Math.random() * array.length);
-      if (!usedIndexes.includes(randomNumber)) {
-        shuffledArray.push(array[randomNumber]);
-        usedIndexes.push(randomNumber);
-        i += 1;
-      }
-    }
-    return shuffledArray;
-  };
-
-  // https://openjavascript.info/2022/03/14/how-to-shuffle-an-array-in-javascript/ func abaixo é p construir array
-
-  array = () => {
-    const { questions } = this.props;
-    const { index } = this.state;
-    const arrx = [
-      ...questions.results[index].incorrect_answers,
-      questions.results[index].correct_answer,
-    ];
-    return arrx;
-  };
-
   render() {
     const { questions, history } = this.props;
     const { classGreen, classRed, showBtn } = this.state;
@@ -115,14 +87,7 @@ class ScreenGame extends React.Component {
       history.push('/');
     } else {
       const { index, seconds, validation } = this.state;
-      const array = this.array();
-      const randomx = this.random(array);
-      // const { results } = data;
-      // const { index } = this.state;
-      // console.log(questions)
-      // const arr = [...questions.results[index].incorrect_answers, questions.results[index].correct_answer];
-
-      // console.log(questions.response_code);
+      const { answers } = this.props;
 
       return (
         <>
@@ -135,7 +100,7 @@ class ScreenGame extends React.Component {
               : <h1>Loading...</h1>}
           </div>
           <div data-testid="answer-options">
-            {randomx.map((answer, i) => (
+            {answers[index].map((answer, i) => (
               <button
                 type="button"
                 disabled={ seconds === 0 }
@@ -183,6 +148,7 @@ ScreenGame.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  answers: PropTypes.arrayOf().isRequired,
   questions: PropTypes.shape({
     response_code: PropTypes.number,
     results: PropTypes.arrayOf(
@@ -200,6 +166,7 @@ const mapStateToProps = (state) => ({
   questions: state.catchQuestions.questions,
   assertions: state.player.assertions,
   score: state.player.score,
+  answers: state.answers.answer,
 });
 
 export default connect(mapStateToProps)(ScreenGame);
