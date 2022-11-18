@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // import { Redirect } from 'react-router-dom';
+import md5 from 'crypto-js/md5';
 import HeaderGame from '../components/HeaderGame';
 import { sumScoreAction } from '../redux/actions/sumScore';
 // import { getQuestions } from '../redux/actions/questions';
@@ -66,9 +67,22 @@ class ScreenGame extends React.Component {
   changeQuestion = () => {
     const { index } = this.state;
     const magic = 4;
+    const { history, userName, email, score, assertions } = this.props;
+    const hash = md5(email).toString();
+    const url = `https://www.gravatar.com/avatar/${hash}`;
     if (index === magic) {
-      const { history } = this.props;
       history.push('/feedback');
+      let store = [];
+      const ranking = { userName, assertions, email: url, score };
+      let newRanking = [];
+      if (localStorage.getItem('ranking')) {
+        store = JSON.parse(localStorage.getItem('ranking'));
+        newRanking = [...store, ranking];
+      }
+      if (!localStorage.getItem('ranking')) {
+        newRanking = [ranking];
+      }
+      localStorage.setItem('ranking', JSON.stringify(newRanking));
     }
     this.setState((prevState) => ({
       index: prevState.index + 1,
@@ -148,6 +162,8 @@ ScreenGame.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  userName: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
   answers: PropTypes.arrayOf().isRequired,
   questions: PropTypes.shape({
     response_code: PropTypes.number,
@@ -167,6 +183,8 @@ const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
   score: state.player.score,
   answers: state.answers.answer,
+  userName: state.userLogin.userName,
+  email: state.userLogin.email,
 });
 
 export default connect(mapStateToProps)(ScreenGame);
