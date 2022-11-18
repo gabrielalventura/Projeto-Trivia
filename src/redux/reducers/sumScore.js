@@ -1,4 +1,4 @@
-import { SUM_SCORE } from '../actions/sumScore';
+import { SUM_SCORE, RESET } from '../actions/sumScore';
 
 const initialState = {
   assertions: 0,
@@ -12,6 +12,12 @@ const player = (state = initialState, action) => {
       ...state,
       assertions: action.assertions,
       score: action.score,
+    });
+  case RESET:
+    return ({
+      ...state,
+      score: 0,
+      assertions: 0,
     });
   default:
     return state;

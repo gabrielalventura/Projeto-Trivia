@@ -5,3 +5,9 @@ export const sumScoreAction = (assertions, score) => ({
   assertions,
   score,
 });
+
+export const RESET = 'RESET';
+
+export const resetScore = () => ({
+  type: RESET,
+});
