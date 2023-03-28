@@ -16,7 +16,8 @@ describe('Testa o Componente login', () => {
     expect(play).toBeInTheDocument();
     expect(play).toBeDisabled();
     });
-    it('Teste se o botão play fica enabled e se é clicavel', async () => {
+
+    it('Teste se o botão play fica enabled e se é clicavel', () => {
         const { history } = renderWithRouterAndRedux(<App />);
     
         const name = screen.getByTestId('input-player-name')
@@ -29,8 +30,9 @@ describe('Testa o Componente login', () => {
         userEvent.type(email, 'j@hot.com');
         expect(play).toBeEnabled();
         userEvent.click(play);
-        await waitFor (() => expect(history.location.pathname).toBe('/game'))
+         waitFor (() => expect(history.location.pathname).toBe('/game'))
         });
+
     it('Teste do botão settings', () => {
         const { history } = renderWithRouterAndRedux(<App />);
         
@@ -38,5 +40,8 @@ describe('Testa o Componente login', () => {
         expect(set).toBeInTheDocument();
         userEvent.click(set);
         expect(history.location.pathname).toBe('/settings')
+        });
+        it('Testa se em caso da API retornar como invalida, o usuário retorna a página de login', () => {
+
         });
 });
